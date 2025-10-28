@@ -23,8 +23,7 @@ def create_board():
 
 # print(pprint.pprint(game_board))
 
-def draw_board(screen, apple_x, apple_y):
-    apple_rect = (apple_x * CELL_SIZE + 10, apple_y * CELL_SIZE + 10, 40, 40)
+def draw_board(screen, apple_x, apple_y, apple_rect):
     for x in range(0, SCREEN_WIDTH, CELL_SIZE):
         for y in range(0, SCREEN_HEIGHT, CELL_SIZE):
             rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
@@ -33,8 +32,6 @@ def draw_board(screen, apple_x, apple_y):
                 pygame.draw.rect(screen, BLACK, apple_rect)
             else:
                 pygame.draw.rect(screen, WHITE, rect, 1)
-    
-    print(apple_x, apple_y)
 
 def main():
 
@@ -76,13 +73,19 @@ def main():
 
 
         # fill the screen with a color to wipe away anything from last frame
-        screen.fill("green")
+        screen.fill("lime")
  
         # RENDER YOUR GAME HERE
 
-        draw_board(screen, apple_x, apple_y)
+        apple_rect = pygame.Rect(apple_x * CELL_SIZE + 10, apple_y * CELL_SIZE + 10, 40, 40)
+        player_rect = pygame.Rect(player_cell[0] * CELL_SIZE + 10, player_cell[1] * CELL_SIZE + 10, 40, 40)
 
-        player_rect = (player_cell[0] * CELL_SIZE + 10, player_cell[1] * CELL_SIZE + 10, 40, 40)
+        # If player hits the edge of screen they lose
+        if (player_rect.centerx >= SCREEN_WIDTH or player_rect.centerx <= 0) or (player_rect.centery >= SCREEN_HEIGHT or player_rect.centery <= 0):
+            running = False
+
+        draw_board(screen, apple_x, apple_y, apple_rect)
+
         pygame.draw.rect(screen, "red", player_rect)
         print(player_cell)
 
@@ -102,7 +105,11 @@ def main():
             if direction == "RIGHT":
                 player_cell[0] += 1
 
-      
+        # Handle Collisions
+        if player_rect.colliderect(apple_rect):
+            # Spawn new apple somewhere else
+            apple_x = random.randint(0, 14)
+            apple_y = random.randint(0, 14)
 
             
 
