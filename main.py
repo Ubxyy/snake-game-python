@@ -2,6 +2,10 @@
 import pygame
 import pprint
 
+WHITE = (200, 200, 200)
+SCREEN_WIDTH = 900
+SCREEN_HEIGHT = 900
+
 def create_board():
     game_board = {}
     for x in range(1, 16):
@@ -10,21 +14,24 @@ def create_board():
     
 # print(pprint.pprint(game_board))
 
+def draw_board(screen):
+    block_size = int(SCREEN_WIDTH / 15)
+    for x in range(0, SCREEN_WIDTH, block_size):
+        for y in range(0, SCREEN_HEIGHT, block_size):
+            rect = pygame.Rect(x, y, block_size, block_size)
+            pygame.draw.rect(screen, WHITE, rect, 1)
+
 def main():
 
     # pygame setup
     pygame.init()
 
     pygame.display.set_caption("Snake Game")
-    screen = pygame.display.set_mode((900, 720))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     running = True
 
-    # Movement flags
-    moving_up = False
-    moving_right = False
-    moving_down = False
-    moving_left = False
+
     direction = ""
 
     dt = 0
@@ -47,13 +54,19 @@ def main():
                 elif event.key == pygame.K_d and direction != "LEFT":
                     direction = "RIGHT"
 
+                
+
+
         # fill the screen with a color to wipe away anything from last frame
         screen.fill("green")
-
+ 
         # RENDER YOUR GAME HERE
-        pygame.draw.circle(screen, "red", player_pos, 20)
+
+        draw_board(screen)
+        pygame.draw.circle(screen, "red", player_pos, 25)
 
 
+        
         if direction == "UP":
             player_pos.y -= 300 * dt
 
