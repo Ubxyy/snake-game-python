@@ -24,16 +24,17 @@ def create_board():
 # print(pprint.pprint(game_board))
 
 def draw_board(screen, apple_x, apple_y):
+    apple_rect = (apple_x * CELL_SIZE + 10, apple_y * CELL_SIZE + 10, 40, 40)
     for x in range(0, SCREEN_WIDTH, CELL_SIZE):
         for y in range(0, SCREEN_HEIGHT, CELL_SIZE):
             rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
             
             if x == apple_x * CELL_SIZE and y == apple_y * CELL_SIZE:
-                pygame.draw.circle(screen, BLACK, (CELL_SIZE * apple_y+CELL_SIZE/2, CELL_SIZE * apple_x + CELL_SIZE/2), 15)
+                pygame.draw.rect(screen, BLACK, apple_rect)
             else:
                 pygame.draw.rect(screen, WHITE, rect, 1)
     
-
+    print(apple_x, apple_y)
 
 def main():
 
@@ -48,8 +49,8 @@ def main():
 
     direction = ""
 
-    apple_x = random.randint(1, 15)
-    apple_y = random.randint(1, 15)
+    apple_x = random.randint(0, 14)
+    apple_y = random.randint(0, 14)
 
     # If apple in player position set to default position
     if apple_x == 7 and apple_y == 7:
@@ -80,7 +81,9 @@ def main():
         # RENDER YOUR GAME HERE
 
         draw_board(screen, apple_x, apple_y)
-        pygame.draw.circle(screen, "red", (CELL_SIZE * player_cell[0] + CELL_SIZE/2, CELL_SIZE * player_cell[1] + CELL_SIZE/2), CELL_SIZE//2 - 5)
+
+        player_rect = (player_cell[0] * CELL_SIZE + 10, player_cell[1] * CELL_SIZE + 10, 40, 40)
+        pygame.draw.rect(screen, "red", player_rect)
         print(player_cell)
 
         current_time = pygame.time.get_ticks()
