@@ -98,23 +98,21 @@ def main():
             last_move_time = current_time
             
             if direction == "UP":
-                for cell in snake:
-                    cell[1] -= 1
-                    print(snake)
-                    
-
+                head_y -= 1
+        
             if direction == "DOWN":
-                for cell in snake:
-                    cell[1] += 1
+                head_y += 1
 
             if direction == "LEFT":
-                for cell in snake:
-                    cell[0] -= 1
+                head_x -= 1
 
             if direction == "RIGHT":
-                for cell in snake:
-                    cell[0] += 1
+                head_x += 1
 
+            for i in range(len(snake) - 1, 0, -1):
+                snake[i] = snake[i-1][:]
+
+        snake[0] = [head_x, head_y]
             
 
         # Handle Collisions
@@ -123,16 +121,16 @@ def main():
             apple_x = random.randint(0, 14)
             apple_y = random.randint(0, 14)
             if direction == "UP":
-                snake.append([tail_x, tail_y+1])
+                snake.append([tail_x, tail_y])
             elif direction == "DOWN":
-                snake.append([tail_x, tail_y - 1])
+                snake.append([tail_x, tail_y])
             elif direction == "LEFT":
-                snake.append([tail_x + 1, tail_y])
+                snake.append([tail_x, tail_y])
             elif direction == "RIGHT":
-                snake.append([tail_x - 1, tail_y])
+                snake.append([tail_x, tail_y])
             
 
-
+        print(snake)
         # flip() the display to put your work on screen
         pygame.display.flip()
 
