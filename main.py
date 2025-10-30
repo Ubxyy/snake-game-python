@@ -129,6 +129,10 @@ def main():
             elif direction == "RIGHT":
                 snake.append([tail_x, tail_y])
             
+        for i in range(1, len(snake)):
+            if snake[0] == snake[i]:
+                pygame.time.delay(500)
+                running = False
 
         print(snake)
         # flip() the display to put your work on screen
