@@ -8,9 +8,8 @@ BLACK = (10, 10, 10)
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 900
 CELL_SIZE = SCREEN_WIDTH//15
-player_cell = [7, 7]
-move_delay = 200   # milliseconds between moves
-
+snake = [[7, 7]]
+move_delay = 250   # milliseconds between moves
 
 
 def create_board():
@@ -78,40 +77,61 @@ def main():
         # RENDER YOUR GAME HERE
 
         apple_rect = pygame.Rect(apple_x * CELL_SIZE + 10, apple_y * CELL_SIZE + 10, 40, 40)
-        player_rect = pygame.Rect(player_cell[0] * CELL_SIZE + 10, player_cell[1] * CELL_SIZE + 10, 40, 40)
 
-        # If player hits the edge of screen they lose
-        if (player_rect.centerx >= SCREEN_WIDTH or player_rect.centerx <= 0) or (player_rect.centery >= SCREEN_HEIGHT or player_rect.centery <= 0):
-            running = False
+        head_x, head_y = snake[0]
+        tail_x, tail_y = snake[-1]
+ 
 
         draw_board(screen, apple_x, apple_y, apple_rect)
 
-        pygame.draw.rect(screen, "red", player_rect)
-        print(player_cell)
+        # Drawing snake
+        for sx, sy in snake:
+            seg_rect = pygame.Rect(sx * CELL_SIZE + 10, sy * CELL_SIZE + 10, 40, 40)
+            pygame.draw.rect(screen, "red", seg_rect)
+      
+        # If player hits the edge of screen they lose
+        if head_x > 14 or head_y > 14:
+            running = False
 
         current_time = pygame.time.get_ticks()
         if current_time - last_move_time > move_delay:
             last_move_time = current_time
             
             if direction == "UP":
-                player_cell[1] -= 1
+                for cell in snake:
+                    cell[1] -= 1
+                    print(snake)
+                    
 
             if direction == "DOWN":
-                player_cell[1] += 1
+                for cell in snake:
+                    cell[1] += 1
 
             if direction == "LEFT":
-                player_cell[0] -= 1
+                for cell in snake:
+                    cell[0] -= 1
 
             if direction == "RIGHT":
-                player_cell[0] += 1
+                for cell in snake:
+                    cell[0] += 1
+
+            
 
         # Handle Collisions
-        if player_rect.colliderect(apple_rect):
+        if head_x == apple_x and head_y == apple_y:
             # Spawn new apple somewhere else
             apple_x = random.randint(0, 14)
             apple_y = random.randint(0, 14)
-
+            if direction == "UP":
+                snake.append([tail_x, tail_y+1])
+            elif direction == "DOWN":
+                snake.append([tail_x, tail_y - 1])
+            elif direction == "LEFT":
+                snake.append([tail_x + 1, tail_y])
+            elif direction == "RIGHT":
+                snake.append([tail_x - 1, tail_y])
             
+
 
         # flip() the display to put your work on screen
         pygame.display.flip()
